@@ -100,11 +100,17 @@ export default function Home() {
         <p className="relative mb-4 text-sm font-medium uppercase tracking-[0.4em] text-red">
           Against the grain
         </p>
-        <h1 className="relative text-[clamp(4rem,15vw,12rem)] font-black leading-[0.85] tracking-tighter">
-          SOUTH
-          <br />
-          PAW
-        </h1>
+        <div className="relative w-[clamp(16rem,60vw,48rem)]">
+          <Image
+            src="/images/logos/logo-type-1.png"
+            alt="SOUTHPAW"
+            width={1200}
+            height={300}
+            priority
+            className="h-auto w-full"
+            sizes="(max-width: 768px) 80vw, 60vw"
+          />
+        </div>
         <p className="relative mt-6 max-w-md text-lg font-light tracking-wide text-bone/70 md:text-xl">
           Wrong hand. Right choice.
         </p>
@@ -251,7 +257,13 @@ export default function Home() {
       <footer className="border-t border-bone/10 px-6 py-12">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 md:flex-row">
           <div>
-            <p className="text-lg font-black tracking-tight">SOUTHPAW</p>
+            <Image
+              src="/images/logos/logo-type-1.png"
+              alt="SOUTHPAW"
+              width={600}
+              height={150}
+              className="h-8 w-auto"
+            />
             <p className="mt-1 text-xs text-bone/40">Dubai, UAE</p>
           </div>
           <div className="flex gap-8 text-xs font-medium uppercase tracking-widest text-bone/50">
