@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const products = [
   {
@@ -64,6 +64,82 @@ function FadeIn({ children, className = "" }: { children: React.ReactNode; class
     <div ref={ref} className={`opacity-0 translate-y-8 transition-all duration-700 ease-out ${className}`}>
       {children}
     </div>
+  );
+}
+
+function WaitlistSection() {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setStatus("loading");
+    setErrorMsg("");
+    try {
+      const res = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setStatus("error");
+        setErrorMsg(data.error || "Something went wrong");
+        return;
+      }
+      setStatus("success");
+      setEmail("");
+    } catch {
+      setStatus("error");
+      setErrorMsg("Something went wrong. Try again.");
+    }
+  }
+
+  return (
+    <section id="waitlist" className="px-6 py-32 text-center">
+      <div className="mx-auto max-w-lg">
+        <FadeIn>
+          <p className="mb-4 text-xs font-bold uppercase tracking-[0.5em] text-red">
+            Lead with your left
+          </p>
+          <h2 className="text-3xl font-black uppercase tracking-tight md:text-5xl">
+            Get in the ring.
+          </h2>
+          <p className="mt-4 text-bone/50">
+            Drop your email. Be first to know when we launch.
+          </p>
+          {status === "success" ? (
+            <div className="mt-10">
+              <p className="text-lg font-bold text-red">You&rsquo;re in! 🥊</p>
+              <p className="mt-2 text-sm text-bone/50">We&rsquo;ll be in touch.</p>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="mt-10 flex flex-col gap-3 sm:flex-row">
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="your@email.com"
+                disabled={status === "loading"}
+                className="flex-1 border border-bone/20 bg-transparent px-5 py-4 text-sm text-bone placeholder:text-bone/30 focus:border-red focus:outline-none disabled:opacity-50"
+              />
+              <button
+                type="submit"
+                disabled={status === "loading"}
+                className="border-2 border-red bg-red px-8 py-4 text-sm font-bold uppercase tracking-widest text-bone transition-all hover:bg-transparent hover:text-red disabled:opacity-50"
+              >
+                {status === "loading" ? "..." : "Submit"}
+              </button>
+            </form>
+          )}
+          {status === "error" && (
+            <p className="mt-3 text-sm text-red">{errorMsg}</p>
+          )}
+        </FadeIn>
+      </div>
+    </section>
   );
 }
 
@@ -220,38 +296,7 @@ export default function Home() {
       </section>
 
       {/* ── WAITLIST ── */}
-      <section id="waitlist" className="px-6 py-32 text-center">
-        <div className="mx-auto max-w-lg">
-          <FadeIn>
-            <p className="mb-4 text-xs font-bold uppercase tracking-[0.5em] text-red">
-              Lead with your left
-            </p>
-            <h2 className="text-3xl font-black uppercase tracking-tight md:text-5xl">
-              Get in the ring.
-            </h2>
-            <p className="mt-4 text-bone/50">
-              Drop your email. Be first to know when we launch.
-            </p>
-            <form
-              onSubmit={(e) => e.preventDefault()}
-              className="mt-10 flex flex-col gap-3 sm:flex-row"
-            >
-              <input
-                type="email"
-                required
-                placeholder="your@email.com"
-                className="flex-1 border border-bone/20 bg-transparent px-5 py-4 text-sm text-bone placeholder:text-bone/30 focus:border-red focus:outline-none"
-              />
-              <button
-                type="submit"
-                className="border-2 border-red bg-red px-8 py-4 text-sm font-bold uppercase tracking-widest text-bone transition-all hover:bg-transparent hover:text-red"
-              >
-                Submit
-              </button>
-            </form>
-          </FadeIn>
-        </div>
-      </section>
+      <WaitlistSection />
 
       {/* ── FOOTER ── */}
       <footer className="border-t border-bone/10 px-6 py-12">
