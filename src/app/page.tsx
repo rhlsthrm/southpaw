@@ -312,7 +312,7 @@ export default function Home() {
             <p className="mt-1 text-xs text-bone/40">Dubai, UAE</p>
           </div>
           <div className="flex gap-8 text-xs font-medium uppercase tracking-widest text-bone/50">
-            <a href="#" className="transition-colors hover:text-red">
+            <a href="https://instagram.com/southpaw.uae" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-red">
               Instagram
             </a>
             <a href="#" className="transition-colors hover:text-red">
